@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Sons of Ibrahim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-card: #242424;
+            --bg-hover: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent: #ffb300;
+            --accent-light: #ffca28;
+            --accent-dark: #c68400;
+            --border: #333333;
+            --success: #4caf50;
+            --error: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 179, 0, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+        
+        .stat-value { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            color: var(--accent); 
+        }
+        
+        .stat-label { 
+            color: var(--text-secondary); 
+            font-size: 0.9rem; 
+            margin-top: 0.5rem; 
+        }
+        
+        /* Section Cards */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-body {
+            padding: 1.5rem;
+        }
+        
+        /* Forms */
+        .form-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .form-file {
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .form-file:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .form-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+        }
+        
+        .tab-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Search and Controls */
+        .controls-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            text-align: left;
+            color: var(--accent);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        
+        tr:last-child td { border-bottom: none; }
+        
+        tr:hover { background: rgba(255, 179, 0, 0.05); }
+        
+        .cell-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .cell-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .cell-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+        }
+        
+        /* Status Badges */
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-success {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background: rgba(255, 152, 0, 0.2);
+            color: var(--warning);
+        }
+        
+        .badge-info {
+            background: rgba(33, 150, 243, 0.2);
+            color: var(--info);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .page-btn {
+            padding: 0.5rem 0.8rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 40px;
+        }
+        
+        .page-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .page-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Loading and Empty States */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        .loading-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .alert-success {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .alert-error {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+        
+        .alert-warning {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            color: var(--accent);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        /* Toggle Section */
+        .toggle-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .toggle-btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .toggle-btn:hover {
+            border-color: var(--accent);
+        }
+        
+        .toggle-btn i {
+            transition: transform 0.3s;
+        }
+        
+        .toggle-btn.active i {
+            transform: rotate(180deg);
+        }
+        
+        .toggle-content {
+            display: none;
+            padding-top: 1rem;
+        }
+        
+        .toggle-content.active {
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .header-actions { width: 100%; justify-content: flex-end; }
+            .form-row { grid-template-columns: 1fr; }
+            .cell-actions { flex-direction: column; }
+            td { padding: 0.75rem; }
+        }
+        
+        /* Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-crown"></i> Sons of Ibrahim - Admin Panel</h1>
+            <div class="header-actions">
+                <a href="sonsofibrahim.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Website
+                </a>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-mobile-alt"></i></div>
+                <div class="stat-value" id="totalApps">0</div>
+                <div class="stat-label">Total Apps</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book"></i></div>
+                <div class="stat-value" id="totalBooks">0</div>
+                <div class="stat-label">Total Books</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-hdd"></i></div>
+                <div class="stat-value" id="totalStorage">0 MB</div>
+                <div class="stat-label">Storage Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-code-branch"></i></div>
+                <div class="stat-value" id="currentVersionDisplay">1.0.0</div>
+                <div class="stat-label">App Version</div>
+            </div>
+        </div>
+
+        <!-- Version Management Section -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-rocket"></i> App Version Management</h2>
+                <span class="badge badge-info">Android App</span>
+            </div>
+            <div class="section-body">
+                <form id="versionForm" class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Version Code (Integer)</label>
+                            <input type="number" name="versionCode" id="versionCode" class="form-input" 
+                                placeholder="e.g., 2" min="1" required>
+                            <small class="cell-meta">Must be higher than current for updates</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Version Name</label>
+                            <input type="text" name="versionName" id="versionName" class="form-input" 
+                                placeholder="e.g., 1.0.1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">APK Download URL</label>
+                        <input type="url" name="downloadUrl" id="downloadUrl" class="form-input" 
+                            placeholder="http://your-server:3000/downloads/app-v1.0.1.apk" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Release Notes</label>
+                        <textarea name="releaseNotes" id="releaseNotes" class="form-textarea" 
+                            placeholder="What's new in this version..." rows="3"></textarea>
+                    </div>
+                    <div class="form-checkbox">
+                        <input type="checkbox" name="forceUpdate" id="forceUpdate">
+                        <label for="forceUpdate">Force users to update (cannot skip)</label>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Update Version
+                        </button>
+                        <div id="versionStatus"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Applications Management -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-box"></i> Applications</h2>
+                <button class="btn btn-primary" onclick="toggleSection('appsUpload')">
+                    <i class="fas fa-plus"></i> Upload New
+                </button>
+            </div>
+            <div class="section-body">
+                <!-- Upload Form (Collapsible) -->
+                <div id="appsUpload" class="toggle-content">
+                    <form id="appUploadForm" class="form-grid" style="margin-bottom: 1.5rem;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" name="name" class="form-input" placeholder="Uploader name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Your Email</label>
+                                <input type="email" name="email" class="form-input" placeholder="email@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Application Name</label>
+                            <input type="text" name="appName" class="form-input" placeholder="My Application" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-textarea" placeholder="Short description..." rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">API Key</label>
+                            <input type="password" name="apiKey" class="form-input" placeholder="Admin API key" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">App File (.apk, .aab, .zip)</label>
+                            <input type="file" name="appFile" class="form-file" accept=".apk,.aab,.zip,.jar" required>
+                        </div>
+                        <div class="progress-container" id="appProgress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="appProgressBar" style="width: 0%"></div>
+                            </div>
+                            <div class="progress-text" id="appProgressText">0%</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-upload"></i> Upload Application
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleSection('appsUpload')">
+                                Cancel
+                            </button>
+                        </div>
+                        <div id="appUploadStatus"></div>
+                    </form>
+                </div>
+
+                <!-- Search -->
+                <div class="controls-bar">
+                    <input type="text" id="appSearch" class="search-box" 
+                        placeholder="Search apps by name, description, email..." onkeyup="debounceAppSearch()">
+                    <button class="btn btn-secondary" onclick="loadApps()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <!-- Apps Table -->
+                <div class="table-wrapper">
+                    <div id="appsLoading" class="loading-state" style="display: none;">
+                        <i class="fas fa-spinner"></i>
+                        <p>Loading applications...</p>
+                    </div>
+                    <div id="appsEmpty" class="empty-state" style="display: none;">
+                        <i class="fas fa-inbox"></i>
+                        <p>No applications found</p>
+                    </div>
+                    <table id="appsTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>App Name</th>
+                                <th>Uploader</th>
+                                <th>File</th>
+                                <th>Size</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appsTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="appsPagination"></div>
+            </div>
+        </div>
+
+        <!-- Books Management -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-book"></i> Books & Resources</h2>
+                <button class="btn btn-primary" onclick="toggleSection('booksUpload')">
+                    <i class="fas fa-plus"></i> Add New
+                </button>
+            </div>
+            <div class="section-body">
+                <!-- Upload Form (Collapsible) -->
+                <div id="booksUpload" class="toggle-content">
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="switchTab('bookFile')">
+                            <i class="fas fa-file-upload"></i> Upload File
+                        </button>
+                        <button type="button" class="tab-btn" onclick="switchTab('bookLink')">
+                            <i class="fas fa-link"></i> Add External Link
+                        </button>
+                    </div>
+
+                    <!-- File Upload Tab -->
+                    <div id="bookFileTab" class="tab-content active">
+                        <form id="bookFileForm" class="form-grid" style="margin-bottom: 1.5rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Author Name</label>
+                                    <input type="text" name="author" class="form-input" placeholder="Book author" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Your Email</label>
+                                    <input type="email" name="email" class="form-input" placeholder="Your email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Book Title</label>
+                                <input type="text" name="bookTitle" class="form-input" placeholder="Book title" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-textarea" placeholder="Book description..." rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Book File (.pdf, .epub)</label>
+                                <input type="file" name="bookFile" class="form-file" accept=".pdf,.epub" required>
+                            </div>
+                            <div class="progress-container" id="bookProgress" style="display: none;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="bookProgressBar" style="width: 0%"></div>
+                                </div>
+                                <div class="progress-text" id="bookProgressText">0%</div>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-upload"></i> Upload Book
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="toggleSection('booksUpload')">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div id="bookFileStatus"></div>
+                        </form>
+                    </div>
+
+                    <!-- Link Tab -->
+                    <div id="bookLinkTab" class="tab-content">
+                        <form id="bookLinkForm" class="form-grid" style="margin-bottom: 1.5rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Author Name</label>
+                                    <input type="text" name="author" class="form-input" placeholder="Book author" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Your Email</label>
+                                    <input type="email" name="email" class="form-input" placeholder="Your email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Book Title</label>
+                                <input type="text" name="bookTitle" class="form-input" placeholder="Book title" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-textarea" placeholder="Book description..." rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Book URL (PDF/EPUB link)</label>
+                                <input type="url" name="bookLink" class="form-input" 
+                                    placeholder="https://example.com/book.pdf" required>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Add Book Link
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="toggleSection('booksUpload')">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div id="bookLinkStatus"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div class="controls-bar">
+                    <input type="text" id="bookSearch" class="search-box" 
+                        placeholder="Search books by title, author, description..." onkeyup="debounceBookSearch()">
+                    <button class="btn btn-secondary" onclick="loadBooks()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <!-- Books Table -->
+                <div class="table-wrapper">
+                    <div id="booksLoading" class="loading-state" style="display: none;">
+                        <i class="fas fa-spinner"></i>
+                        <p>Loading books...</p>
+                    </div>
+                    <div id="booksEmpty" class="empty-state" style="display: none;">
+                        <i class="fas fa-inbox"></i>
+                        <p>No books found</p>
+                    </div>
+                    <table id="booksTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="booksPagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteItemName">this item</strong>?</p>
+                <p class="cell-meta">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIG ====================
+        const API_BASE_URL = 'http://localhost:3000'; // Change to your server IP
+        
+        // ==================== STATE ====================
+        let appsState = {
+            page: 1,
+            limit: 10,
+            search: '',
+            total: 0,
+            totalPages: 1
+        };
+        
+        let booksState = {
+            page: 1,
+            limit: 10,
+            search: '',
+            total: 0,
+            totalPages: 1
+        };
+        
+        let deleteCallback = null;
+        let searchTimeout = null;
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadVersion();
+            loadApps();
+            loadBooks();
+            loadStats();
+            setupForms();
+        });
+
+        // ==================== VERSION MANAGEMENT ====================
+        function loadVersion() {
+            fetch(`${API_BASE_URL}/api/version`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.version) {
+                        document.getElementById('versionCode').value = data.version.versionCode;
+                        document.getElementById('versionName').value = data.version.versionName;
+                        document.getElementById('downloadUrl').value = data.version.downloadUrl || '';
+                        document.getElementById('releaseNotes').value = data.version.releaseNotes || '';
+                        document.getElementById('forceUpdate').checked = data.version.forceUpdate || false;
+                        document.getElementById('currentVersionDisplay').textContent = data.version.versionName;
+                    }
+                })
+                .catch(err => console.error('Error loading version:', err));
+        }
+
+        document.getElementById('versionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const statusEl = document.getElementById('versionStatus');
+            const formData = new FormData(this);
+            const data = {
+                versionCode: parseInt(formData.get('versionCode')),
+                versionName: formData.get('versionName'),
+                downloadUrl: formData.get('downloadUrl'),
+                releaseNotes: formData.get('releaseNotes'),
+                forceUpdate: formData.get('forceUpdate') === 'on'
+            };
+            
+            statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            fetch(`${API_BASE_URL}/api/version`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    statusEl.innerHTML = '<span class="badge badge-success"><i class="fas fa-check"></i> Saved!</span>';
+                    document.getElementById('currentVersionDisplay').textContent = data.versionName;
+                    setTimeout(() => statusEl.innerHTML = '', 3000);
+                } else {
+                    statusEl.innerHTML = `<span class="badge badge-warning">Error: ${result.message}</span>`;
+                }
+            })
+            .catch(err => {
+                statusEl.innerHTML = `<span class="badge badge-error">Network error</span>`;
+            });
+        });
+
+        // ==================== APPS MANAGEMENT ====================
+        function loadApps() {
+            const loading = document.getElementById('appsLoading');
+            const table = document.getElementById('appsTable');
+            const empty = document.getElementById('appsEmpty');
+            const tbody = document.getElementById('appsTableBody');
+            
+            loading.style.display = 'block';
+            table.style.display = 'none';
+            empty.style.display = 'none';
+            
+            const url = new URL(`${API_BASE_URL}/applications`);
+            url.searchParams.set('page', appsState.page);
+            url.searchParams.set('limit', appsState.limit);
+            if (appsState.search) url.searchParams.set('search', appsState.search);
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    loading.style.display = 'none';
+                    
+                    if (!data.success || !data.applications.length) {
+                        empty.style.display = 'block';
+                        return;
+                    }
+                    
+                    tbody.innerHTML = '';
+                    data.applications.forEach(app => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${app.id}</td>
+                            <td>
+                                <div class="cell-name">${escapeHtml(app.appName || 'Unnamed')}</div>
+                                <div class="cell-meta">${escapeHtml(app.description || '').substring(0, 50)}${(app.description || '').length > 50 ? '...' : ''}</div>
+                            </td>
+                            <td>
+                                <div class="cell-name">${escapeHtml(app.name || 'Unknown')}</div>
+                                <div class="cell-meta">${escapeHtml(app.email || '')}</div>
+                            </td>
+                            <td>
+                                <div class="cell-name">${escapeHtml(app.originalName)}</div>
+                                <div class="cell-meta">${app.mimetype || 'Unknown'}</div>
+                            </td>
+                            <td>${formatBytes(app.size)}</td>
+                            <td>${formatDate(app.created_at)}</td>
+                            <td>
+                                <div class="cell-actions">
+                                    <a href="${API_BASE_URL}/uploads/${app.filename}" 
+                                        class="btn btn-success btn-sm" download>
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm" 
+                                        onclick="confirmDelete('app', ${app.id}, '${escapeAttr(app.appName || app.originalName)}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    table.style.display = 'table';
+                    appsState.total = data.pagination.total;
+                    appsState.totalPages = data.pagination.totalPages;
+                    renderAppsPagination();
+                })
+                .catch(err => {
+                    loading.style.display = 'none';
+                    empty.style.display = 'block';
+                    empty.innerHTML = '<i class="fas fa-exclamation-circle"></i><p>Error loading apps</p>';
+                });
+        }
+
+        function renderAppsPagination() {
+            const container = document.getElementById('appsPagination');
+            container.innerHTML = '';
+            
+            if (appsState.totalPages <= 1) return;
+            
+            // Prev
+            if (appsState.page > 1) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                btn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                btn.onclick = () => { appsState.page--; loadApps(); };
+                container.appendChild(btn);
+            }
+            
+            // Pages
+            for (let i = 1; i <= appsState.totalPages; i++) {
+                if (i === 1 || i === appsState.totalPages || (i >= appsState.page - 1 && i <= appsState.page + 1)) {
+                    const btn = document.createElement('button');
+                    btn.className = 'page-btn' + (i === appsState.page ? ' active' : '');
+                    btn.textContent = i;
+                    btn.onclick = () => { appsState.page = i; loadApps(); };
+                    container.appendChild(btn);
+                } else if (i === appsState.page - 2 || i === appsState.page + 2) {
+                    const span = document.createElement('span');
+                    span.textContent = '...';
+                    span.style.color = 'var(--text-muted)';
+                    container.appendChild(span);
+                }
+            }
+            
+            // Next
+            if (appsState.page < appsState.totalPages) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                btn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                btn.onclick = () => { appsState.page++; loadApps(); };
+                container.appendChild(btn);
+            }
+        }
+
+        function debounceAppSearch() {
+            clearTimeout(searchTimeout);
+            appsState.search = document.getElementById('appSearch').value;
+            appsState.page = 1;
+            searchTimeout = setTimeout(loadApps, 300);
+        }
+
+        // ==================== BOOKS MANAGEMENT ====================
+        function loadBooks() {
+            const loading = document.getElementById('booksLoading');
+            const table = document.getElementById('booksTable');
+            const empty = document.getElementById('booksEmpty');
+            const tbody = document.getElementById('booksTableBody');
+            
+            loading.style.display = 'block';
+            table.style.display = 'none';
+            empty.style.display = 'none';
+            
+            const url = new URL(`${API_BASE_URL}/books`);
+            url.searchParams.set('page', booksState.page);
+            url.searchParams.set('limit', booksState.limit);
+            if (booksState.search) url.searchParams.set('search', booksState.search);
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    loading.style.display = 'none';
+                    
+                    if (!data.success || !data.books.length) {
+                        empty.style.display = 'block';
+                        return;
+                    }
+                    
+                    tbody.innerHTML = '';
+                    data.books.forEach(book => {
+                        const row = document.createElement('tr');
+                        const typeBadge = book.isExternal ? 
+                            '<span class="badge badge-info"><i class="fas fa-link"></i> Link</span>' : 
+                            '<span class="badge badge-success"><i class="fas fa-file"></i> Local</span>';
+                        
+                        row.innerHTML = `
+                            <td>${book.id}</td>
+                            <td>
+                                <div class="cell-name">${escapeHtml(book.bookTitle)}</div>
+                                <div class="cell-meta">${escapeHtml(book.description || '').substring(0, 50)}${(book.description || '').length > 50 ? '...' : ''}</div>
+                            </td>
+                            <td>
+                                <div class="cell-name">${escapeHtml(book.author || 'Unknown')}</div>
+                                <div class="cell-meta">${escapeHtml(book.email || '')}</div>
+                            </td>
+                            <td>${typeBadge}</td>
+                            <td>${formatBytes(book.size)}</td>
+                            <td>${formatDate(book.created_at)}</td>
+                            <td>
+                                <div class="cell-actions">
+                                    <a href="${book.isExternal ? book.bookLink : `${API_BASE_URL}/uploads/${book.filename}`}" 
+                                        class="btn btn-success btn-sm" target="_blank" ${!book.isExternal ? 'download' : ''}>
+                                        <i class="fas fa-${book.isExternal ? 'external-link-alt' : 'download'}"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm" 
+                                        onclick="confirmDelete('book', ${book.id}, '${escapeAttr(book.bookTitle)}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    
+                    table.style.display = 'table';
+                    booksState.total = data.pagination.total;
+                    booksState.totalPages = data.pagination.totalPages;
+                    renderBooksPagination();
+                })
+                .catch(err => {
+                    loading.style.display = 'none';
+                    empty.style.display = 'block';
+                    empty.innerHTML = '<i class="fas fa-exclamation-circle"></i><p>Error loading books</p>';
+                });
+        }
+
+        function renderBooksPagination() {
+            const container = document.getElementById('booksPagination');
+            container.innerHTML = '';
+            
+            if (booksState.totalPages <= 1) return;
+            
+            if (booksState.page > 1) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                btn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                btn.onclick = () => { booksState.page--; loadBooks(); };
+                container.appendChild(btn);
+            }
+            
+            for (let i = 1; i <= booksState.totalPages; i++) {
+                if (i === 1 || i === booksState.totalPages || (i >= booksState.page - 1 && i <= booksState.page + 1)) {
+                    const btn = document.createElement('button');
+                    btn.className = 'page-btn' + (i === booksState.page ? ' active' : '');
+                    btn.textContent = i;
+                    btn.onclick = () => { booksState.page = i; loadBooks(); };
+                    container.appendChild(btn);
+                } else if (i === booksState.page - 2 || i === booksState.page + 2) {
+                    const span = document.createElement('span');
+                    span.textContent = '...';
+                    span.style.color = 'var(--text-muted)';
+                    container.appendChild(span);
+                }
+            }
+            
+            if (booksState.page < booksState.totalPages) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                btn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                btn.onclick = () => { booksState.page++; loadBooks(); };
+                container.appendChild(btn);
+            }
+        }
+
+        function debounceBookSearch() {
+            clearTimeout(searchTimeout);
+            booksState.search = document.getElementById('bookSearch').value;
+            booksState.page = 1;
+            searchTimeout = setTimeout(loadBooks, 300);
+        }
+
+        // ==================== UPLOAD FORMS ====================
+        function setupForms() {
+            // App Upload
+            document.getElementById('appUploadForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                uploadFile(this, `${API_BASE_URL}/upload`, 'appProgress', 'appProgressBar', 'appProgressText', 'appUploadStatus', () => {
+                    this.reset();
+                    toggleSection('appsUpload');
+                    loadApps();
+                    loadStats();
+                });
+            });
+            
+            // Book File Upload
+            document.getElementById('bookFileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                uploadFile(this, `${API_BASE_URL}/books`, 'bookProgress', 'bookProgressBar', 'bookProgressText', 'bookFileStatus', () => {
+                    this.reset();
+                    toggleSection('booksUpload');
+                    loadBooks();
+                    loadStats();
+                });
+            });
+            
+            // Book Link Form
+            document.getElementById('bookLinkForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const statusEl = document.getElementById('bookLinkStatus');
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+                
+                fetch(`${API_BASE_URL}/books`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        statusEl.innerHTML = '<span class="badge badge-success"><i class="fas fa-check"></i> Added!</span>';
+                        setTimeout(() => {
+                            this.reset();
+                            toggleSection('booksUpload');
+                            loadBooks();
+                            loadStats();
+                        }, 1000);
+                    } else {
+                        statusEl.innerHTML = `<span class="badge badge-warning">Error: ${result.message}</span>`;
+                    }
+                })
+                .catch(err => {
+                    statusEl.innerHTML = '<span class="badge badge-error">Network error</span>';
+                });
+            });
+        }
+
+        function uploadFile(form, url, progressContainerId, progressBarId, progressTextId, statusId, onSuccess) {
+            const progressContainer = document.getElementById(progressContainerId);
+            const progressBar = document.getElementById(progressBarId);
+            const progressText = document.getElementById(progressTextId);
+            const statusEl = document.getElementById(statusId);
+            
+            progressContainer.style.display = 'block';
+            statusEl.innerHTML = '';
+            
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData(form);
+            
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percent + '%';
+                    progressText.textContent = percent + '%';
+                }
+            });
+            
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    progressContainer.style.display = 'none';
+                    try {
+                        const res = JSON.parse(xhr.responseText || '{}');
+                        if (xhr.status >= 200 && xhr.status < 300 && res.success) {
+                            statusEl.innerHTML = '<span class="badge badge-success"><i class="fas fa-check"></i> Success!</span>';
+                            onSuccess();
+                        } else {
+                            statusEl.innerHTML = `<span class="badge badge-warning">Error: ${res.message || 'Upload failed'}</span>`;
+                        }
+                    } catch (e) {
+                        statusEl.innerHTML = '<span class="badge badge-error">Server error</span>';
+                    }
+                }
+            };
+            
+            xhr.onerror = () => {
+                progressContainer.style.display = 'none';
+                statusEl.innerHTML = '<span class="badge badge-error">Network error</span>';
+            };
+            
+            xhr.open('POST', url, true);
+            xhr.send(formData);
+        }
+
+        // ==================== DELETE FUNCTIONALITY ====================
+        function confirmDelete(type, id, name) {
+            document.getElementById('deleteItemName').textContent = name;
+            document.getElementById('deleteModal').classList.add('active');
+            
+            deleteCallback = () => {
+                const endpoint = type === 'app' ? 'applications' : 'books';
+                fetch(`${API_BASE_URL}/${endpoint}/${id}`, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(data => {
+                        closeDeleteModal();
+                        if (data.success) {
+                            if (type === 'app') loadApps();
+                            else loadBooks();
+                            loadStats();
+                        } else {
+                            alert('Error: ' + (data.message || 'Delete failed'));
+                        }
+                    })
+                    .catch(err => {
+                        closeDeleteModal();
+                        alert('Network error');
+                    });
+            };
+            
+            document.getElementById('confirmDeleteBtn').onclick = deleteCallback;
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteCallback = null;
+        }
+
+        // ==================== STATS ====================
+        function loadStats() {
+            Promise.all([
+                fetch(`${API_BASE_URL}/applications?page=1&limit=1`).then(r => r.json()),
+                fetch(`${API_BASE_URL}/books?page=1&limit=1`).then(r => r.json())
+            ])
+            .then(([appsData, booksData]) => {
+                const totalApps = appsData.pagination?.total || 0;
+                const totalBooks = booksData.pagination?.total || 0;
+                
+                document.getElementById('totalApps').textContent = totalApps;
+                document.getElementById('totalBooks').textContent = totalBooks;
+            })
+            .catch(err => console.error('Error loading stats:', err));
+        }
+
+        // ==================== UI HELPERS ====================
+        function toggleSection(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('active');
+        }
+
+        function switchTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.tab-btn').classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function escapeAttr(text) {
+            return text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Implement your logout logic here
+                window.location.href = 'login.html'; // or your login page
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('deleteModal').addEventListener('click', (e) => {
+            if (e.target.id === 'deleteModal') closeDeleteModal();
+        });
+    </script>
+</body>
+</html>
